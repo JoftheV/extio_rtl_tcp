@@ -1,0 +1,36 @@
+name: RTL-TCP Setup
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up RTL-TCP
+      run: |
+        echo "RTLTCP_API_KEY=${{ secrets.RTLTCP_API_KEY }}" >> $GITHUB_ENV
+        echo "RTLTCP_API_SECRET=${{ secrets.RTLTCP_API_SECRET }}" >> $GITHUB_ENV
+        echo "RTLTCP_HOST=${{ secrets.RTLTCP_HOST }}" >> $GITHUB_ENV
+        echo "RTLTCP_PORT=${{ secrets.RTLTCP_PORT }}" >> $GITHUB_ENV
+        echo "RTLTCP_SAMPLING_RATE=${{ secrets.RTLTCP_SAMPLING_RATE }}" >> $GITHUB_ENV
+        echo "RTLTCP_FREQUENCY=${{ secrets.RTLTCP_FREQUENCY }}" >> $GITHUB_ENV
+        echo "RTLTCP_GAIN=${{ secrets.RTLTCP_GAIN }}" >> $GITHUB_ENV
+
+    - name: Run RTL-TCP
+      run: |
+        rtl_tcp -a $RTLTCP_HOST -p $RTLTCP_PORT -s $RTLTCP_SAMPLING_RATE -f $RTLTCP_FREQUENCY -g $RTLTCP_GAIN
+      env:
+        RTLTCP_API_KEY: ${{ secrets.RTLTCP_API_KEY }}
+        RTLTCP_API_SECRET: ${{ secrets.RTLTCP_API_SECRET }}
+        RTLTCP_HOST: ${{ secrets.RTLTCP_HOST }}
+        RTLTCP_PORT: ${{ secrets.RTLTCP_PORT }}
+        RTLTCP_SAMPLING_RATE: ${{ secrets.RTLTCP_SAMPLING_RATE }}
+        RTLTCP_FREQUENCY: ${{ secrets.RTLTCP_FREQUENCY }}
+        RTLTCP_GAIN: ${{ secrets.RTLTCP_GAIN }}
